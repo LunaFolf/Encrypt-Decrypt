@@ -1,0 +1,170 @@
+   
+      
+      @vdu%!216 = -10
+      @vdu%!220 = 25
+      *FONT DejaVu Sans Light
+      
+      
+      
+      REPEAT
+        FileE = OPENOUT("Encryption.txt")
+        FileD = OPENOUT("Decryption.txt")
+        
+        
+        COLOUR 128+0
+        COLOUR 15
+        
+        CLS
+        
+        
+        PRINT "Press 1 For Encryption"
+        PRINT "Press 2 For Decryption"
+        PRINT
+        Key% = GET
+        
+        
+        IF Key% = 49 THEN
+          
+          PRINT "choose an number to encrypt your message by"
+          PRINT "NOTE: Remember this number"
+          
+          INPUT "> " NumberE
+          
+          
+          PRINT "Please enter a message to encrypt"
+          INPUT " INPUT  | " MessageE$
+          
+          
+          DIM MessageEletters$(LEN(MessageE$))
+          DIM MessageElettersE$(LEN(MessageE$))
+          
+          CLS
+          
+          FOR y = 1 TO LEN(MessageE$)
+            COLOUR 11
+            
+            MessageEletters$(y) = MID$(MessageE$,y,1)
+            
+            IF ASC(MessageEletters$(y)) > 96 AND ASC(MessageEletters$(y)) < 123 THEN
+              MessageEletters$(y) = CHR$(ASC(MessageEletters$(y)) - 32)
+            ENDIF
+            
+            
+            MessageElettersE$(y) = CHR$( ASC(MessageEletters$(y)) + NumberE )
+            
+            IF (ASC(MessageEletters$(y)) + NumberE) > 90 THEN
+              
+              MissingVal = NumberE - (90 - ASC(MessageEletters$(y)))
+              
+              MessageElettersE$(y) = CHR$( 64 + MissingVal )
+              
+            ENDIF
+            
+            IF ASC(MessageElettersE$(y)) = 32 + NumberE THEN
+              
+              MessageElettersE$(y) = CHR$( 0 )
+              
+            ENDIF
+            
+            
+            
+            PRINT MessageElettersE$(y);
+            PRINT #FileE, MessageElettersE$(y)
+            
+            WAIT 50
+            
+            
+          NEXT y
+          COLOUR 15
+          BPUT #FileE, 13
+          
+          PRINT
+          PRINT
+          
+          
+          
+          
+          PRINT
+          PRINT
+          
+        ENDIF
+        
+        IF Key% = 50 THEN
+          
+          PRINT "choose an number to decrypt your message by"
+          
+          INPUT "> " NumberD
+          
+          PRINT "Enter a message to decrypt"
+          
+          INPUT " Input  | " MessageD$
+          
+          DIM MessageDletters$(LEN(MessageD$))
+          DIM MessageDlettersE$(LEN(MessageD$))
+          
+          
+          PRINT
+          
+          PRINT MessageD$
+          PRINT
+          
+          FOR z = 1 TO LEN(MessageD$)
+            COLOUR 11
+            
+            MessageDletters$(z) = MID$(MessageD$,z,1)
+            
+            IF ASC(MessageDletters$(z)) > 96 AND ASC(MessageDletters$(z)) < 123 THEN
+              MessageDletters$(z) = CHR$(ASC(MessageDletters$(z)) - 32)
+            ENDIF
+            
+            
+            MessageDlettersE$(z) = CHR$( ASC(MessageDletters$(z)) - NumberD )
+            
+            IF (ASC(MessageDletters$(z)) - NumberD) < 65 THEN
+              
+              MissingVal = NumberD - ( ASC(MessageDletters$(z)) - 65)
+              
+              MessageDlettersE$(z) = CHR$( 91 - MissingVal )
+              
+            ENDIF
+            
+            IF ASC(MessageDlettersE$(z)) = 32 + NumberD THEN
+              
+              MessageDlettersE$(z) = CHR$( 0 )
+              
+            ENDIF
+            
+            IF ASC(MessageDlettersE$(z)) = 53 THEN
+              
+              MessageDlettersE$(z) = CHR$( 32 )
+              
+            ENDIF
+            
+            
+            
+            PRINT MessageDlettersE$(z);
+            PRINT #FileD, MessageDlettersE$(z)
+            
+            WAIT 50
+            
+            
+            
+          NEXT z
+          COLOUR 15
+          BPUT #FileD, 13
+          
+        ENDIF
+        
+        
+        PRINT
+        WAIT 100
+        PRINT "PRINTING RESULTS TO 'Encryption.txt'"
+        
+        
+        WAIT 300
+        PRINT "DONE"
+        
+        PRINT "Press Any Key to Restart"
+        Key% = GET
+        
+      UNTIL FALSE
